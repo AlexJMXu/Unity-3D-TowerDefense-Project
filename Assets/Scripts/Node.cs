@@ -6,12 +6,15 @@ public class Node : MonoBehaviour {
 	public Color hoverColor;
 	public Vector3 positionOffset;
 
-	private GameObject turret;
+	[Header("Optional")]
+	public GameObject turret;
 
 	private Renderer rend;
 	private Color startColor;
 
 	BuildManager buildManager;
+
+	private GameObject turretPreview;
 
 	void Start() {
 		rend = GetComponent<Renderer>();
@@ -20,29 +23,43 @@ public class Node : MonoBehaviour {
 		buildManager = BuildManager.instance;
 	}
 
+	public Vector3 GetBuildPosition() {
+		return transform.position + positionOffset;
+	}
+
 	void OnMouseDown() {
 		if (EventSystem.current.IsPointerOverGameObject()) return;
 
-		if (buildManager.GetTurretToBuild() == null) return;
+		if (!buildManager.CanBuild) return;
 
 		if (turret != null) {
 			Debug.Log("Can't build there! - TODO: Display on screen.");
 			return;
 		}
 
-		GameObject turretToBuild = BuildManager.instance.GetTurretToBuild();
-		turret = (GameObject) Instantiate (turretToBuild, transform.position + positionOffset, transform.rotation);
+		buildManager.BuildTurretOn(this);
+
+		rend.material.color = startColor;
+		if (turretPreview != null) Destroy(turretPreview);
 	}
 
 	void OnMouseEnter() {
 		if (EventSystem.current.IsPointerOverGameObject()) return;
 
-		if (buildManager.GetTurretToBuild() == null) return;
+		if (!buildManager.CanBuild) return;
 
-		rend.material.color = hoverColor;
+		if (turret != null || PlayerStats.money < buildManager.GetTurretCost() ) {
+			rend.material.color = Color.red;
+		} else {
+			rend.material.color = hoverColor;
+		}
+		
+		turretPreview = (GameObject) Instantiate(buildManager.GetTurretToBuildPreview(), GetBuildPosition(), Quaternion.identity);
 	}
 
 	void OnMouseExit() {
 		rend.material.color = startColor;
+
+		if (turretPreview != null) Destroy(turretPreview);
 	}
 }
