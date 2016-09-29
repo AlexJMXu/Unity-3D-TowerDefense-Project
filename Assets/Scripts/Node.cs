@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 public class Node : MonoBehaviour {
 
 	public Color hoverColor;
+	public Color notEnoughMoneyColor;
 	public Vector3 positionOffset;
 
 	[Header("Optional")]
@@ -39,7 +40,7 @@ public class Node : MonoBehaviour {
 
 		buildManager.BuildTurretOn(this);
 
-		rend.material.color = startColor;
+		//rend.material.color = startColor;
 		if (turretPreview != null) Destroy(turretPreview);
 	}
 
@@ -48,10 +49,10 @@ public class Node : MonoBehaviour {
 
 		if (!buildManager.CanBuild) return;
 
-		if (turret != null || PlayerStats.money < buildManager.GetTurretCost() ) {
-			rend.material.color = Color.red;
-		} else {
+		if (buildManager.HasMoney) {
 			rend.material.color = hoverColor;
+		} else {
+			rend.material.color = notEnoughMoneyColor;
 		}
 		
 		turretPreview = (GameObject) Instantiate(buildManager.GetTurretToBuildPreview(), GetBuildPosition(), Quaternion.identity);
