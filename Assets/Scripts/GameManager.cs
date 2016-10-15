@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour {
 
 	private Node currentSelectedNode;
 
+	private bool gameEnded = false;
+
 	void Start() {
 		instance = this;
 
@@ -17,13 +19,25 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (gameEnded) return;
+
 		if (Input.GetMouseButtonDown(1)) {
 			buildManager.SelectTurretToBuild(null);
-			currentSelectedNode.ResetToDefault();
+			if (currentSelectedNode != null)
+				currentSelectedNode.ResetToDefault();
+		}
+
+		if (PlayerStats.lives <= 0) {
+			EndGame();
 		}
 	}
 
 	public void SetSelectedNode(Node node) {
 		currentSelectedNode = node;
+	}
+
+	private void EndGame() {
+		gameEnded = true;
+		Debug.Log("Game Over!");
 	}
 }

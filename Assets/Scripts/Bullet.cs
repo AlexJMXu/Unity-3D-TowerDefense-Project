@@ -3,9 +3,11 @@
 public class Bullet : MonoBehaviour {
 
 	private Transform target;
+	private Vector3 lastTargetPosition;
 
 	public float speed = 70f;
 	public float explosionRadius = 0f;
+	public int damage = 50;
 
 	public GameObject impactEffect;
 
@@ -15,12 +17,15 @@ public class Bullet : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		Vector3 dir;
+
 		if (target == null) {
-			Destroy(gameObject);
-			return;
+			dir = lastTargetPosition - transform.position;
+		} else {
+			dir = target.position - transform.position;
+			lastTargetPosition = target.position;
 		}
 
-		Vector3 dir = target.position - transform.position;
 		float distanceThisFrame = speed * Time.deltaTime;
 
 		if (dir.magnitude <= distanceThisFrame) {
@@ -39,7 +44,7 @@ public class Bullet : MonoBehaviour {
 		if (explosionRadius > 0f) {
 			Explode();
 		} else {
-			Damage(target);
+			if (target != null) Damage(target);
 		}
 
 		Destroy(gameObject);
@@ -55,9 +60,11 @@ public class Bullet : MonoBehaviour {
 	}
 
 	void Damage(Transform enemy) {
-		PlayerStats.money += 100;
-		Debug.Log("Money: " + PlayerStats.money);
-		Destroy(enemy.gameObject);
+		Enemy e = enemy.GetComponent<Enemy>();
+
+		if (e != null) {
+			e.TakeDamage(damage);
+		}
 	}
 
 	void OnDrawGizmosSelected() {

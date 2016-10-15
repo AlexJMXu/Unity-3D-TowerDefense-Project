@@ -4,10 +4,14 @@ using System.Collections;
 public class PlayerStats : MonoBehaviour {
 
 	public static int money;
-	private int startMoney = 400;
+	public int startMoney = 400;
+
+	public static int lives;
+	public int startLives = 20;
 
 	void Start() {
 		money = startMoney;
+		lives = startLives;
 	}
 
 }
