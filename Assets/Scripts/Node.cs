@@ -14,6 +14,7 @@ public class Node : MonoBehaviour {
 	private Color startColor;
 
 	BuildManager buildManager;
+	GameManager gameManager;
 
 	private GameObject turretPreview;
 
@@ -22,6 +23,7 @@ public class Node : MonoBehaviour {
 		startColor = rend.material.color;
 
 		buildManager = BuildManager.instance;
+		gameManager = GameManager.instance;
 	}
 
 	public Vector3 GetBuildPosition() {
@@ -39,6 +41,7 @@ public class Node : MonoBehaviour {
 		}
 
 		buildManager.BuildTurretOn(this);
+		rend.material.color = startColor;
 
 		//rend.material.color = startColor;
 		if (turretPreview != null) Destroy(turretPreview);
@@ -47,18 +50,25 @@ public class Node : MonoBehaviour {
 	void OnMouseEnter() {
 		if (EventSystem.current.IsPointerOverGameObject()) return;
 
-		if (!buildManager.CanBuild) return;
+		if (!buildManager.CanBuild || turret != null) return;
 
 		if (buildManager.HasMoney) {
 			rend.material.color = hoverColor;
 		} else {
 			rend.material.color = notEnoughMoneyColor;
 		}
+
+		gameManager.SetSelectedNode(this);
 		
 		turretPreview = (GameObject) Instantiate(buildManager.GetTurretToBuildPreview(), GetBuildPosition(), Quaternion.identity);
 	}
 
 	void OnMouseExit() {
+		ResetToDefault();
+		gameManager.SetSelectedNode(null);
+	}
+
+	public void ResetToDefault() {
 		rend.material.color = startColor;
 
 		if (turretPreview != null) Destroy(turretPreview);

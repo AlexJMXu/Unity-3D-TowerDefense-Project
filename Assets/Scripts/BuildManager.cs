@@ -45,6 +45,10 @@ public class BuildManager : MonoBehaviour {
 		turretToBuild = turret;
 	}
 
+	public GameObject GetTurretToBuild() {
+		return turretToBuild.prefab;
+	}
+
 	public GameObject GetTurretToBuildPreview() {
 		return turretToBuild.preview;
 	}
