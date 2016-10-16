@@ -35,6 +35,11 @@ public class Node : MonoBehaviour {
 
 		if (!buildManager.CanBuild) return;
 
+		if (!buildManager.HasMoney) {
+			Debug.Log("Not enough money to build that!");
+			return;
+		}
+
 		if (turret != null) {
 			Debug.Log("Can't build there! - TODO: Display on screen.");
 			return;

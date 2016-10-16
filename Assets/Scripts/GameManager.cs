@@ -11,9 +11,16 @@ public class GameManager : MonoBehaviour {
 
 	private bool gameEnded = false;
 
-	void Start() {
-		instance = this;
+	void Awake() {
+		if (instance != null) {
+			Debug.LogError("Already another instance of GameManager in scene.");
+			return;
+		} else {
+			instance = this;
+		}
+	}
 
+	void Start() {
 		buildManager = BuildManager.instance;
 	}
 
