@@ -47,8 +47,12 @@ public class CameraController : MonoBehaviour {
 
 		Vector3 pos = transform.position;
 
+		pos.x = Mathf.Clamp(pos.x, -40, 120);
+
 		pos.y -= scroll * 100 * scrollSpeed * Time.deltaTime;
-		pos.y = Mathf.Clamp(pos.y, minY, maxY); 
+		pos.y = Mathf.Clamp(pos.y, minY, maxY);
+
+		pos.z = Mathf.Clamp(pos.z, -110, 90); 
 
 		transform.position = pos;
 	
