@@ -9,7 +9,9 @@ public class GameManager : MonoBehaviour {
 
 	private Node currentSelectedNode;
 
-	private bool gameEnded = false;
+	public static bool gameIsOver;
+
+	public GameObject gameOverUI;
 
 	void Awake() {
 		if (instance != null) {
@@ -22,11 +24,12 @@ public class GameManager : MonoBehaviour {
 
 	void Start() {
 		buildManager = BuildManager.instance;
+		gameIsOver = false;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if (gameEnded) return;
+		if (gameIsOver) return;
 
 		if (Input.GetMouseButtonDown(1)) {
 			buildManager.SelectTurretToBuild(null);
@@ -44,7 +47,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void EndGame() {
-		gameEnded = true;
-		Debug.Log("Game Over!");
+		gameIsOver = true;
+		gameOverUI.SetActive(true);
 	}
 }
