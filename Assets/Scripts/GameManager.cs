@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
 		if (gameIsOver) return;
 
 		if (Input.GetMouseButtonDown(1)) {
-			buildManager.SelectTurretToBuild(null);
+			buildManager.ResetSelections();
 			if (currentSelectedNode != null)
 				currentSelectedNode.ResetToDefault();
 		}

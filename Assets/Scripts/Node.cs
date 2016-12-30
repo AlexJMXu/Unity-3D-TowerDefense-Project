@@ -33,15 +33,15 @@ public class Node : MonoBehaviour {
 	void OnMouseDown() {
 		if (EventSystem.current.IsPointerOverGameObject()) return;
 
+		if (turret != null) {
+			buildManager.SelectNode(this);
+			return;
+		}
+
 		if (!buildManager.CanBuild) return;
 
 		if (!buildManager.HasMoney) {
 			Debug.Log("Not enough money to build that!");
-			return;
-		}
-
-		if (turret != null) {
-			Debug.Log("Can't build there! - TODO: Display on screen.");
 			return;
 		}
 
