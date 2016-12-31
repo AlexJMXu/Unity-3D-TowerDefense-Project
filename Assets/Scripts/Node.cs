@@ -7,8 +7,9 @@ public class Node : MonoBehaviour {
 	public Color notEnoughMoneyColor;
 	public Vector3 positionOffset;
 
-	[Header("Optional")]
-	public GameObject turret;
+	[HideInInspector] public GameObject turret;
+	[HideInInspector] public TurretBlueprint turretBlueprint;
+	[HideInInspector] public bool isUpgraded = false;
 
 	private Renderer rend;
 	private Color startColor;
@@ -40,16 +41,49 @@ public class Node : MonoBehaviour {
 
 		if (!buildManager.CanBuild) return;
 
-		if (!buildManager.HasMoney) {
-			Debug.Log("Not enough money to build that!");
-			return;
-		}
+		BuildTurret(buildManager.GetTurretBlueprint());
 
-		buildManager.BuildTurretOn(this);
+		//buildManager.BuildTurretOn(this);
 		rend.material.color = startColor;
 
 		//rend.material.color = startColor;
 		if (turretPreview != null) Destroy(turretPreview);
+	}
+
+	void BuildTurret(TurretBlueprint bp) {
+		if (PlayerStats.money < turretBlueprint.cost) {
+			Debug.Log("Not enough money to build that!");
+			return;
+		}
+
+		PlayerStats.money -= bp.cost;
+
+		GameObject turret = (GameObject) Instantiate(bp.prefab, GetBuildPosition(), Quaternion.identity);
+		this.turret = turret;
+
+		turretBlueprint = bp;
+
+		GameObject effect = (GameObject) Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity);
+		Destroy(effect, 2f);
+	}
+
+	public void UpgradeTurret() {
+		if (PlayerStats.money < turretBlueprint.upgradeCost) {
+			Debug.Log("Not enough money to upgrade that!");
+			return;
+		}
+
+		PlayerStats.money -= turretBlueprint.upgradeCost;
+
+		Destroy(this.turret);
+
+		GameObject turret = (GameObject) Instantiate(turretBlueprint.upgradedPrefab, GetBuildPosition(), Quaternion.identity);
+		this.turret = turret;
+
+		GameObject effect = (GameObject) Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity);
+		Destroy(effect, 2f);
+
+		isUpgraded = true;
 	}
 
 	void OnMouseEnter() {
@@ -57,7 +91,7 @@ public class Node : MonoBehaviour {
 
 		if (!buildManager.CanBuild || turret != null) return;
 
-		if (buildManager.HasMoney) {
+		if (PlayerStats.money >= turretBlueprint.cost) {
 			rend.material.color = hoverColor;
 		} else {
 			rend.material.color = notEnoughMoneyColor;
