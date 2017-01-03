@@ -51,7 +51,7 @@ public class Node : MonoBehaviour {
 	}
 
 	void BuildTurret(TurretBlueprint bp) {
-		if (PlayerStats.money < turretBlueprint.cost) {
+		if (PlayerStats.money < bp.cost) {
 			Debug.Log("Not enough money to build that!");
 			return;
 		}
@@ -81,9 +81,21 @@ public class Node : MonoBehaviour {
 		this.turret = turret;
 
 		GameObject effect = (GameObject) Instantiate(buildManager.buildEffect, GetBuildPosition(), Quaternion.identity);
-		Destroy(effect, 2f);
+		Destroy(effect, 3f);
 
 		isUpgraded = true;
+	}
+
+	public void SellTurret() {
+		PlayerStats.money += turretBlueprint.GetSellAmount();
+
+		GameObject effect = (GameObject) Instantiate(buildManager.sellEffect, GetBuildPosition(), Quaternion.identity);
+		Destroy(effect, 3f);
+
+		Destroy(this.turret);
+		this.turret = null;
+		this.turretBlueprint = null;
+		this.isUpgraded = false;
 	}
 
 	void OnMouseEnter() {
@@ -91,7 +103,7 @@ public class Node : MonoBehaviour {
 
 		if (!buildManager.CanBuild || turret != null) return;
 
-		if (PlayerStats.money >= turretBlueprint.cost) {
+		if (PlayerStats.money >= buildManager.GetTurretBlueprint().cost) {
 			rend.material.color = hoverColor;
 		} else {
 			rend.material.color = notEnoughMoneyColor;
