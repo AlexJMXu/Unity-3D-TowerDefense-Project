@@ -35,8 +35,10 @@ public class Enemy : MonoBehaviour {
 		PlayerStats.money += worth;
 		
 		GameObject _effect = (GameObject) Instantiate(deathEffect, transform.position, Quaternion.identity);
-		
 		Destroy(_effect, 4f);
+
+		WaveSpawner.enemiesAlive--;
+
 		Destroy(gameObject);
 	}
 
