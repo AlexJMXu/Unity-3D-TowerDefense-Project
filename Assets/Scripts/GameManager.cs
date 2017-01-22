@@ -13,6 +13,11 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject gameOverUI;
 
+	public string nextLevel = "Level02";
+	public int levelToUnlock = 2;
+
+	public SceneFader sceneFader;
+
 	void Awake() {
 		if (instance != null) {
 			Debug.LogError("Already another instance of GameManager in scene.");
@@ -49,5 +54,11 @@ public class GameManager : MonoBehaviour {
 	private void EndGame() {
 		gameIsOver = true;
 		gameOverUI.SetActive(true);
+	}
+
+	public void WinLevel() {
+		Debug.Log("LEVEL COMPLETE!");
+		PlayerPrefs.SetInt("levelReached", levelToUnlock);
+		sceneFader.FadeTo(nextLevel);
 	}
 }
