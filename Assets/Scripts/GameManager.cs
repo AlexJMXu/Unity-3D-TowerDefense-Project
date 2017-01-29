@@ -6,17 +6,12 @@ public class GameManager : MonoBehaviour {
 	public static GameManager instance;
 	
 	BuildManager buildManager;
-
 	private Node currentSelectedNode;
 
 	public static bool gameIsOver;
 
 	public GameObject gameOverUI;
-
-	public string nextLevel = "Level02";
-	public int levelToUnlock = 2;
-
-	public SceneFader sceneFader;
+	public GameObject completeLevelUI;
 
 	void Awake() {
 		if (instance != null) {
@@ -57,8 +52,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void WinLevel() {
-		Debug.Log("LEVEL COMPLETE!");
-		PlayerPrefs.SetInt("levelReached", levelToUnlock);
-		sceneFader.FadeTo(nextLevel);
+		gameIsOver = true;
+		completeLevelUI.SetActive(true);
 	}
 }
