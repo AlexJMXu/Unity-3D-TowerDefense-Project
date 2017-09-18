@@ -1,7 +1,7 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{B155BF05-2CBD-4963-B4CF-CEEA2C1DEE81}") = "Unity-3D-TowerDefense-Project", "Assembly-CSharp.csproj", "{F70FBDB9-5789-2A79-7135-2057A5E3E76B}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity-3D-TowerDefense-Project", "Assembly-CSharp.csproj", "{F70FBDB9-5789-2A79-7135-2057A5E3E76B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
